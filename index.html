@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Sree's Blog</title>
+  <style>
+    /* GLOBAL */
+    body{
+      padding-top:80px; margin:0; font-family:Arial, sans-serif; color:#fff;
+      background:url('bg1.jpg') no-repeat center center fixed; background-size:cover;
+      overflow-x:hidden;
+    }
+    body::before{
+      content:""; position:fixed; inset:0; background:rgba(0,0,0,0.45);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      z-index:-1;
+    }
+
+    header{ position:fixed; top:0; left:0; width:100%; z-index:9999; }
+    header .bar{
+      display:flex; align-items:center; justify-content:space-between;
+      background:rgba(0,0,40,0.65);
+      backdrop-filter:blur(14px);
+      padding:15px 25px; box-shadow:0 4px 18px rgba(0,0,0,0.4);
+    }
+    header .logo{ font-size:22px; font-weight:700; letter-spacing:1px; }
+    header nav a{ margin-left:16px; color:#fff; text-decoration:none; font-weight:700; }
+
+    .container{ max-width:1150px; margin:40px auto; padding:40px; }
+
+    /* INTRO */
+    .intro-flex{
+      display:flex; align-items:center; justify-content:space-between; gap:40px;
+      padding:30px; background:rgba(255,255,255,0.12);
+      border-radius:15px; border:2px solid #b300ff; backdrop-filter:blur(10px);
+      box-shadow:0 8px 28px rgba(0,0,0,0.35);
+    }
+    .intro-title{ font-size:48px; font-weight:900; margin:0 0 14px; }
+    .intro-highlight{ background:#0057ff; padding:6px 14px; border-radius:8px; }
+    .intro-text{ font-size:18px; max-width:680px; line-height:1.6; margin-bottom:18px; }
+    .intro-btn{ background:linear-gradient(90deg,#ff6ec4,#ffc66b); padding:12px 22px;
+      border-radius:30px; border:none; cursor:pointer; font-weight:700;
+      box-shadow:0 6px 18px rgba(0,0,0,0.25);
+    }
+    .intro-img img{ width:320px; border-radius:12px; box-shadow:0 8px 25px rgba(0,0,0,0.35); }
+
+    /* ABOUT */
+    #about h1{ font-size:40px; margin-bottom:12px; }
+    #about p{ font-size:20px; line-height:1.7; }
+
+    /* POSTS */
+    .post-card{
+      background:rgba(10,10,30,0.6); border-radius:20px; padding:36px; margin-bottom:28px;
+      box-shadow:0 10px 35px rgba(0,0,0,0.45); backdrop-filter: blur(10px);
+      display:flex; gap:28px; align-items:center;
+    }
+    .post-left{ max-width:60%; }
+    .tag{ background:#ffda5c; color:#000; padding:6px 14px; border-radius:20px;
+      font-weight:700; margin-bottom:12px; display:inline-block;
+    }
+    .post-title{ font-size:34px; margin:6px 0; font-weight:800; }
+    .post-date{ color:#d5d5d5; margin-bottom:14px; font-size:14px; }
+    .post-text{ font-size:17px; line-height:1.7; }
+    blockquote{ margin-top:20px; border-left:4px solid gold; padding-left:14px; font-style:italic; }
+    .post-img img{ width:350px; border-radius:18px; box-shadow:0 10px 35px rgba(0,0,0,0.45); }
+    .post-multi-img{ display:flex; flex-direction:column; gap:16px; align-items:center; }
+    .post-multi-img img{ width:300px; border-radius:14px; box-shadow:0 8px 30px rgba(0,0,0,0.35); }
+
+    /* GRID */
+    .blog-grid-title{ font-size:32px; font-weight:800; margin-bottom:6px; }
+    .blog-grid-sub{ color:#ddd; margin-bottom:22px; }
+    .blog-grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:20px; }
+    .blog-grid-card{ background:rgba(10,10,30,0.7); padding:22px; border-radius:14px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.4);
+    }
+    .grid-tag{ background:#5a1c66; padding:6px 12px; border-radius:14px; font-weight:700;
+      margin-bottom:10px; display:inline-block;
+    }
+    .grid-title{ font-size:18px; font-weight:800; margin:6px 0; }
+    .grid-date{ color:#bbb; font-size:13px; margin-bottom:10px; }
+    .grid-desc{ margin-bottom:12px; }
+    .grid-read{ color:gold; font-weight:800; cursor:pointer; }
+
+    /* BLOG MODAL */
+    .modal-overlay{ position:fixed; inset:0; display:none;
+      justify-content:center; align-items:center;
+      background:rgba(0,0,0,0.7); backdrop-filter:blur(8px);
+      z-index:20000; padding:24px;
+    }
+    .modal-box{ background:#0d0b12; color:#fff; width:800px; max-width:100%;
+      border-radius:14px; padding:28px; box-shadow:0 20px 60px rgba(0,0,0,0.6);
+      position:relative;
+    }
+    .modal-title{ font-size:22px; font-weight:800; margin-bottom:12px; }
+    .modal-content{ line-height:1.7; white-space:pre-wrap; }
+    .modal-close{ position:absolute; right:16px; top:10px; background:none; border:none;
+      color:#ff66a3; font-size:28px; cursor:pointer;
+    }
+
+    /* PHOTO GRID */
+    .photo-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+    .photo-grid img{ width:100%; height:240px; object-fit:cover; border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.45); cursor:pointer; transition:0.18s;
+    }
+    .photo-grid img:hover{ transform:scale(1.03); }
+
+    /* IMAGE MODAL */
+    .img-modal{ position:fixed; inset:0; display:none;
+      justify-content:center; align-items:center;
+      background:rgba(0,0,0,0.85); backdrop-filter:blur(6px);
+      z-index:25000; padding:20px;
+    }
+    .img-modal img{ max-width:95%; max-height:95%; border-radius:16px;
+      box-shadow:0 30px 80px rgba(0,0,0,0.6);
+    }
+
+    @media(max-width:900px){
+      .intro-flex{ flex-direction:column; text-align:center; }
+      .post-card{ flex-direction:column; }
+      .post-img img{ width:100%; max-width:420px; }
+      .photo-grid{ grid-template-columns:repeat(2,1fr); }
+    }
+
+    footer{ text-align:center; padding:30px 0; color:#ddd; margin-top:30px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="logo">SREE<span style="color:#4da3ff;">'s</span></div>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#blog">Blog</a>
+      <a href="#photos">Photos</a>
+</nav>
+    </div>
+  </header>
+
+  <!-- INTRO -->
+  <div class="container" id="home">
+    <div class="intro-flex">
+      <div class="intro-text-block">
+        <h1 class="intro-title"><span class="intro-highlight">Hey, I'm Sree</span> 😉</h1>
+        <p class="intro-text">Welcome to my space on the internet where I share my thoughts, moments, and little highlights of my life.</p>
+        <button class="intro-btn" onclick="document.getElementById('blog').scrollIntoView({behavior:'smooth'})">Read my latest blog ↓</button>
+      </div>
+
+      <div class="intro-img">
+        <img src="mypic_png.png" alt="Sree">
+      </div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="container" id="about">
+    <h1>About Me</h1>
+    <p>I’m that person who’s lazy *and* energetic at the same time — depends on the vibe. I love talking to people but hesitate before saying the first “hi.” From chess to basketball, football, handball, and badminton — if it’s a sport, I’m in. Currently a student at Amity University, Bangalore, living a chill, happy life. ✨😄</p>
+  </div>
+
+  <!-- BLOG SECTION -->
+  <div class="container" id="blog">
+
+    <!-- ONAM Post -->
+    <div class="post-card">
+      <div class="post-left">
+        <div class="tag">Latest Post</div>
+        <h2 class="post-title">🌼 ONAM CELEB IN AUB</h2>
+        <div class="post-date">Published: 16 September 2025</div>
+        <p class="post-text">Had lots of fun with my crime partners, enjoying the sadya, cultural events, laughter, chaos, and all the Onam vibes! Truly one of the most wholesome and memorable days! 💛✨</p>
+        <blockquote>"Onam hits different when you're surrounded by the right people."</blockquote>
+      </div>
+      <div class="post-img"><img src="Onam_1.jpeg" alt="Onam"></div>
+    </div>
+
+    <!-- Extra Shots -->
+    <div class="post-card">
+      <div class="post-left">
+        <div class="tag">More Moments</div>
+        <h2 class="post-title">📸 ONAM CELEBRATION — EXTRA SHOTS</h2>
+        <div class="post-date">Published: 16 September 2025</div>
+        <p class="post-text">Some more smiles, chaos, and festive vibes from the same day! These moments deserved their own spotlight. ✨ <br><b>& The Boyz squad 😎</b></p>
+      </div>
+      <div class="post-multi-img">
+        <img src="Onam_2.jpeg" alt="Extra1">
+        <img src="Onam_3.jpeg" alt="Extra2">
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MORE GRID + MODALS -->
+  <div class="container">
+    <h2 class="blog-grid-title"> More From My Life</h2>
+    <p class="blog-grid-sub">Highlights from my student life, hobbies, and small adventures.</p>
+
+    <div class="blog-grid">
+      <div class="blog-grid-card">
+        <div class="grid-tag">Tech Life</div>
+        <div class="grid-title">Late Night life</div>
+        <div class="grid-date">8 December 2025</div>
+        <div class="grid-desc">When the world sleeps, VS Code shines…</div>
+        <a class="grid-read" data-target="tmpl-1" data-title="Late Night life">Read more →</a>
+      </div>
+
+      <div class="blog-grid-card">
+        <div class="grid-tag">Daily Life</div>
+        <div class="grid-title">Life as an Anime Addict</div>
+        <div class="grid-date">5 December 2025</div>
+        <div class="grid-desc">Late-night marathons that recharge me.</div>
+        <a class="grid-read" data-target="tmpl-2" data-title="Life as an Anime Addict">Read more →</a>
+      </div>
+
+      <div class="blog-grid-card">
+        <div class="grid-tag">Cybersecurity</div>
+        <div class="grid-title">Why SOC & Blue Team Work Excites Me</div>
+        <div class="grid-date">30 November 2025</div>
+        <div class="grid-desc">The adrenaline of monitoring logs…</div>
+        <a class="grid-read" data-target="tmpl-3" data-title="Why SOC & Blue Team Work Excites Me">Read more →</a>
+      </div>
+
+      <div class="blog-grid-card">
+        <div class="grid-tag">Learning</div>
+        <div class="grid-title">How I Started Exploring Malware</div>
+        <div class="grid-date">25 November 2025</div>
+        <div class="grid-desc">Malware analysis opened a new world…</div>
+        <a class="grid-read" data-target="tmpl-4" data-title="How I Started Exploring Malware">Read more →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- modal templates -->
+  <template id="tmpl-1">
+    <p>Most nights, you’ll find me wide awake with my laptop, while everything else is asleep. The soft hum of the fan and the calm darkness make it easier for me to focus.
+    </br>Sometimes the quiet of the night brings clarity — I fix bugs, try new ideas, and end up learning something new every session.</p>
+  </template>
+
+  <template id="tmpl-2">
+    <p>When the day drains me, late-night anime marathons bring me back to life. The calm glow of the screen and those story-filled worlds help me reset and find my energy again.
+    </br>It’s not just escapism — it’s a small ritual that recharges me and sparks creativity for the next day.</p>
+  </template>
+
+  <template id="tmpl-3">
+    <p>The thrill of monitoring networks, spotting a suspicious event, and piecing together the story behind an alert is incredibly addictive. It’s like detective work but for systems and data.
+    </br>Every incident is a puzzle — defending an environment teaches you how attackers think and how to build better defenses. The continuous learning keeps me motivated.</p>
+  </template>
+
+  <template id="tmpl-4">
+    <p>My curiosity began with small experiments in a safe lab environment and gradually grew as I read more papers and followed tutorials from experienced researchers.
+    </br>It’s important to be ethical — study, learn, and contribute to defensive knowledge. Over time I built a foundation that let me understand malware behaviors and how to counter them.</p>
+  </template>
+
+  <!-- modal overlay for blog-grid cards -->
+  <div id="blogModal" class="modal-overlay" onclick="if(event.target===this) closeBlogModal()">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" aria-label="Close modal" onclick="closeBlogModal()">×</button>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-content" id="modalContent"></div>
+    </div>
+  </div>
+
+  <!-- PHOTOS -->
+  <div class="container" id="photos">
+    <h2 style="margin:0 0 10px 0">Photos</h2>
+    <p style="margin:0 0 18px 0; color:#ddd">Captured moments — click to open.</p>
+
+    <div class="photo-grid">
+      <img src="Onam_1.jpeg" alt="Onam 1">
+      <img src="Onam_2.jpeg" alt="Onam 2">
+      <img src="Onam_3.jpeg" alt="Onam 3">
+      <img src="Badminton time.jpeg" alt="Badminton">
+      <img src="Me.jpeg" alt="Me">
+      <img src="Friends.jpeg" alt="Friends">
+      <img src="Basket.jpeg" alt="Basket">
+    </div>
+  </div>
+
+  <!-- image modal -->
+  <div id="imgModal" class="img-modal" onclick="if(event.target===this) closeImgModal()">
+    <img id="modalImg" src="" alt="Enlarged photo">
+  </div>
+
+  <footer>
+    © 2025 Sree (Sree Rag S Nair) — All Rights Reserved
+  </footer>
+
+  <script>
+    // Blog-grid modal functions
+    function openBlogModal(title, tmplId) {
+      const tpl = document.getElementById(tmplId);
+      if (!tpl) return;
+      document.getElementById('modalTitle').textContent = title;
+      document.getElementById('modalContent').innerHTML = tpl.innerHTML;
+      document.getElementById('blogModal').style.display = 'flex';
+    }
+    function closeBlogModal(){
+      document.getElementById('blogModal').style.display = 'none';
+      document.getElementById('modalTitle').textContent = '';
+      document.getElementById('modalContent').textContent = '';
+    }
+
+    // Wire grid read buttons
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('.grid-read').forEach(function(el){
+        el.addEventListener('click', function(e){
+          e.preventDefault();
+          const title = el.getAttribute('data-title') || '';
+          const target = el.getAttribute('data-target');
+          if (target) openBlogModal(title, target);
+        });
+      });
+
+      // Image popup: clicking any photo opens modal
+      document.querySelectorAll('.photo-grid img').forEach(img=>{
+        img.addEventListener('click', ()=>{
+          document.getElementById('modalImg').src = img.src;
+          document.getElementById('imgModal').style.display = 'flex';
+        });
+      });
+    });
+
+    function closeImgModal(){
+      document.getElementById('imgModal').style.display = 'none';
+      document.getElementById('modalImg').src = '';
+    }
+  </script>
+</body>
+</html>
+
